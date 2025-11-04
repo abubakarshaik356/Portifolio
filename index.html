@@ -438,7 +438,7 @@
 <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 <script>
   (function(){
-    emailjs.init("YOUR_PUBLIC_KEY"); // Replace with your EmailJS Public Key
+    emailjs.init("VdqAaE8dVmIDbcTc7"); // Replace with your EmailJS Public Key
   })();
 
   document.getElementById("contact-form").addEventListener("submit", function(e){
@@ -447,7 +447,7 @@
     const email = document.getElementById("email").value;
     const message = document.getElementById("message").value;
 
-    emailjs.send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", {
+    emailjs.send("service_ar7x9ck", "template_cysyhjg", {
       from_name: name,
       from_email: email,
       message: message
