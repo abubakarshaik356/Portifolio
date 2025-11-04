@@ -1,0 +1,406 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Shaik Abubakar Siddiq — Portfolio</title>
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- AOS (scroll animations) -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#02040a;
+      --matte:#071017;
+      --neon-cyan: #00f0ff;
+      --neon-purple: #a259ff;
+      --muted: #9fb7b2;
+      --card-bg: rgba(10,14,18,0.6);
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family:'Poppins',system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;}
+    body{
+      background: radial-gradient(1200px 700px at 10% 20%, rgba(162,89,255,0.06), transparent 10%),
+                  radial-gradient(1100px 700px at 90% 80%, rgba(0,240,255,0.03), transparent 10%),
+                  var(--bg);
+      color:#dff7f7;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      overflow-x:hidden;
+      scroll-behavior:smooth;
+    }
+
+    /* Neon grid background (canvas-like lines) */
+    .neon-grid {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events:none;
+      background-image:
+        linear-gradient(0deg, rgba(162,89,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,240,255,0.02) 1px, transparent 1px);
+      background-size: 100px 100px, 120px 120px;
+      opacity:0.6;
+      mix-blend-mode:screen;
+      filter: blur(0.8px) saturate(1.1);
+    }
+
+    /* subtle animated moving grid overlay */
+    .neon-grid::after{
+      content:'';
+      position:absolute;inset:0;
+      background-image:
+        linear-gradient(0deg, rgba(162,89,255,0.012) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,240,255,0.01) 1px, transparent 1px);
+      background-size:350px 350px, 390px 390px;
+      animation: gridMove 18s linear infinite;
+      opacity:0.9;
+    }
+    @keyframes gridMove{ from{transform:translateY(0)} to{transform:translateY(-80px)} }
+
+    /* Navbar */
+    .navbar{
+      background: linear-gradient(180deg, rgba(7,10,12,0.65), rgba(6,8,10,0.55));
+      border-bottom: 1px solid rgba(162,89,255,0.06);
+      z-index: 1020;
+    }
+    .navbar-brand{ color:var(--neon-purple); font-weight:700; letter-spacing:0.2px;}
+    .nav-link{ color: #bfeff0; margin-left:.6rem; }
+    .nav-link.active, .nav-link:hover { color: var(--neon-cyan); text-shadow: 0 0 12px rgba(0,240,255,0.12); }
+
+    /* Hero */
+    .hero {
+      min-height:72vh;
+      display:flex;
+      align-items:center;
+      position:relative;
+      z-index:2;
+    }
+    .hero-left{ padding:48px 24px; }
+    .hero h1{ color:var(--neon-purple); font-size:2.6rem; margin-bottom:8px; text-shadow:0 8px 40px rgba(162,89,255,0.08);}
+    .hero p.lead{ color:var(--muted); font-size:1.05rem; margin-bottom:18px; }
+
+    .btn-neon {
+      background: linear-gradient(90deg, var(--neon-cyan), var(--neon-purple));
+      color:#041018;
+      font-weight:700;
+      box-shadow: 0 8px 40px rgba(162,89,255,0.08), 0 4px 18px rgba(0,240,255,0.05);
+      border: none;
+      padding:12px 18px;
+      border-radius:10px;
+      transition: transform .15s ease, box-shadow .15s ease;
+    }
+    .btn-neon:hover{ transform: translateY(-4px) scale(1.02); box-shadow: 0 18px 80px rgba(162,89,255,0.18); color:#fff; }
+
+    /* Profile Card */
+    .profile-wrap{
+      display:flex;
+      gap:20px;
+      align-items:center;
+      justify-content:center;
+    }
+    .profile-img{
+      width:160px;height:160px;border-radius:18px;
+      overflow:hidden;border:4px solid rgba(0,240,255,0.08);
+      box-shadow: 0 12px 30px rgba(0,240,255,0.04);
+      position:relative;
+      transition: transform .4s ease, box-shadow .4s;
+      background:linear-gradient(135deg, rgba(162,89,255,0.06), rgba(0,240,255,0.03));
+    }
+    .profile-img img{ width:100%;height:100%;object-fit:cover;display:block; }
+
+    .profile-img::after{
+      content:'';
+      position:absolute; inset:-8px;
+      border-radius:22px;
+      background: linear-gradient(90deg, rgba(0,240,255,0.06), rgba(162,89,255,0.06));
+      filter:blur(18px);
+      opacity:0.9;
+      transition: opacity .4s, transform .4s;
+      z-index:-1;
+    }
+    .profile-img:hover{ transform: translateY(-6px) rotate(-1.2deg); box-shadow: 0 28px 80px rgba(162,89,255,0.14); }
+    .profile-caption{ text-align:left; }
+
+    /* Glass cards */
+    .card-neon {
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border: 1px solid rgba(162,89,255,0.07);
+      box-shadow: 0 6px 30px rgba(10,12,14,0.6);
+      border-radius:14px;
+      transition: transform .3s ease, box-shadow .3s ease;
+    }
+    .card-neon:hover{ transform: translateY(-12px) scale(1.01); box-shadow: 0 30px 80px rgba(162,89,255,0.12); }
+
+    /* Skills grid */
+    .skill-pill{
+      display:inline-block;padding:10px 14px;margin:8px;border-radius:999px;
+      background:linear-gradient(90deg, rgba(0,240,255,0.06), rgba(162,89,255,0.04));
+      border:1px solid rgba(162,89,255,0.06);
+      color: #cfeff0;font-weight:600;
+    }
+
+    /* Projects */
+    .project-card{
+      border-radius:12px;padding:18px;
+      background: linear-gradient(180deg, rgba(5,8,8,0.6), rgba(12,14,15,0.5));
+      border: 1px solid rgba(0,240,255,0.06);
+      transition: transform .3s ease, box-shadow .3s ease;
+    }
+    .project-card:hover{ transform: translateY(-12px); box-shadow: 0 20px 80px rgba(0,240,255,0.06); }
+    .project-badge{ padding:6px 10px;border-radius:8px;background: rgba(162,89,255,0.12); color: var(--neon-purple); font-weight:700; display:inline-block; font-size:0.9rem; }
+
+    footer{
+      margin-top:48px;padding:18px 0;text-align:center;color:#8fbfb8;
+      border-top:1px solid rgba(162,89,255,0.04);
+    }
+
+    /* Responsive */
+    @media(max-width:900px){
+      .profile-img{width:120px;height:120px}
+      .hero h1{font-size:2.2rem}
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- animated neon grid -->
+  <div class="neon-grid" aria-hidden="true"></div>
+
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="#">Shaik Abubakar Siddiq</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navCollapse">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navCollapse">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+          <li class="nav-item"><a class="nav-link" href="#skills">Skills</a></li>
+          <li class="nav-item"><a class="nav-link" href="#projects">Projects</a></li>
+          <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-7 hero-left" data-aos="fade-right">
+          <h1>Hi, I'm <span style="color:var(--neon-cyan)">Shaik Abubakar Siddiq</span></h1>
+          <p class="lead">Java Full Stack Developer • Servlets • JSP • ReactJS • MySQL — B.Tech CSE (Completed)</p>
+
+          <div class="d-flex gap-2 mt-3">
+            <!-- link to resume (Google Drive direct download) -->
+            <a class="btn btn-neon" href="https://drive.google.com/uc?export=download&id=1gOjPggYtlyq00v-mg_L0DBpSLh1lkKJv" target="_blank" rel="noopener">
+              Download Resume
+            </a>
+
+            <a class="btn btn-outline-light" href="https://github.com/abubakarshaik356" target="_blank" rel="noopener" style="border-radius:10px; padding:10px 14px;">
+              View GitHub
+            </a>
+          </div>
+        </div>
+
+        <div class="col-lg-5 text-center" data-aos="fade-left">
+          <div class="profile-wrap">
+            <div class="profile-img">
+              <!-- place your image at assets/img/profile.jpg -->
+              <img src="assets/img/profile.jpg" alt="Shaik Abubakar Siddiq">
+            </div>
+            <div class="profile-caption text-start">
+              <h5 style="color:var(--neon-cyan); margin-bottom:3px;">Shaik Abubakar Siddiq</h5>
+              <p style="color:var(--muted); margin-bottom:6px;">Java Full Stack Developer</p>
+              <p style="font-size:.9rem;color:#bfeff0;margin-bottom:4px;"><strong>Location:</strong> Proddatur, India</p>
+              <div>
+                <a href="mailto:abubakarshaik356@gmail.com" class="btn btn-sm btn-outline-light" style="border-radius:10px;">Say Hello</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- ABOUT -->
+  <section id="about" class="py-5" data-aos="fade-up">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-6">
+          <div class="card card-neon p-4">
+            <h4 style="color:var(--neon-purple);">About Me</h4>
+            <p style="color:var(--muted);">
+              I recently completed my B.Tech in Computer Science and Engineering. I focus on full-stack development using Java backend technologies and modern frontend frameworks like React. I enjoy building efficient, maintainable systems and learning new tools.
+            </p>
+            <ul style="color:#cfeff0;">
+              <li>Graduation: B.Tech CSE — Completed</li>
+              <li>Interested in backend systems, web apps, and scalable design</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="col-lg-6">
+          <div class="card card-neon p-4">
+            <h5 style="color:var(--neon-cyan);">Quick Facts</h5>
+            <div class="row mt-3">
+              <div class="col-6">
+                <p style="color:var(--muted);"><strong>Languages</strong><br>Java, JavaScript, Python (basics)</p>
+              </div>
+              <div class="col-6">
+                <p style="color:var(--muted);"><strong>Tools</strong><br>MySQL, Git, Eclipse, VS Code</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills" class="py-5" data-aos="zoom-in">
+    <div class="container text-center">
+      <h4 style="color:var(--neon-purple); margin-bottom:18px;">Skills</h4>
+      <div class="d-flex flex-wrap justify-content-center">
+        <div class="skill-pill">Java</div>
+        <div class="skill-pill">ReactJS</div>
+        <div class="skill-pill">Servlets & JSP</div>
+        <div class="skill-pill">JDBC & MySQL</div>
+        <div class="skill-pill">HTML5 & CSS3</div>
+        <div class="skill-pill">REST APIs</div>
+        <div class="skill-pill">Git & GitHub</div>
+        <div class="skill-pill">Bootstrap</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects" class="py-5" data-aos="fade-up">
+    <div class="container">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 style="color:var(--neon-purple);">Selected Projects</h4>
+        <small style="color:var(--muted);">Click to view on GitHub</small>
+      </div>
+
+      <div class="row g-4">
+        <!-- BankEase -->
+        <div class="col-md-4">
+          <a href="#" target="_blank" rel="noopener" class="text-decoration-none">
+            <div class="project-card p-4 h-100">
+              <div class="d-flex justify-content-between align-items-start">
+                <span class="project-badge">Java</span>
+                <small style="color:var(--muted);">2025</small>
+              </div>
+              <h5 style="margin-top:12px;color:#eafcff;">BankEase — Banking System</h5>
+              <p style="color:var(--muted);">Full-stack banking app built with Servlets, JSP, JDBC, and MySQL. Features user authentication, transfers, and transaction history using MVC architecture.</p>
+              <div class="mt-3">
+                <span class="badge bg-transparent text-info">Servlets</span>
+                <span class="badge bg-transparent text-info">JSP</span>
+                <span class="badge bg-transparent text-info">MySQL</span>
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <!-- Student Management -->
+        <div class="col-md-4">
+          <a href="#" target="_blank" rel="noopener" class="text-decoration-none">
+            <div class="project-card p-4 h-100">
+              <div class="d-flex justify-content-between align-items-start">
+                <span class="project-badge">React</span>
+                <small style="color:var(--muted);">2024</small>
+              </div>
+              <h5 style="margin-top:12px;color:#eafcff;">Student Management System</h5>
+              <p style="color:var(--muted);">CRUD application using ReactJS and JSON Server. Uses React Hooks and component-based architecture for fast UI updates and local API simulation.</p>
+              <div class="mt-3">
+                <span class="badge bg-transparent text-info">ReactJS</span>
+                <span class="badge bg-transparent text-info">JSON Server</span>
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <!-- Hospital Portal -->
+        <div class="col-md-4">
+          <a href="#" target="_blank" rel="noopener" class="text-decoration-none">
+            <div class="project-card p-4 h-100">
+              <div class="d-flex justify-content-between align-items-start">
+                <span class="project-badge">Django</span>
+                <small style="color:var(--muted);">2024</small>
+              </div>
+              <h5 style="margin-top:12px;color:#eafcff;">Hospital & Patient Portal</h5>
+              <p style="color:var(--muted);">Django-based full-stack portal for managing patients, doctors and appointments. Implements secure authentication and relational DB design.</p>
+              <div class="mt-3">
+                <span class="badge bg-transparent text-info">Django</span>
+                <span class="badge bg-transparent text-info">MySQL</span>
+              </div>
+            </div>
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact / Social -->
+  <section id="contact" class="py-4" data-aos="fade-up">
+    <div class="container text-center">
+      <p style="color:var(--muted); margin-bottom:6px;">📧 <a href="mailto:abubakarshaik356@gmail.com" style="color:var(--neon-cyan); text-decoration:none;">abubakarshaik356@gmail.com</a></p>
+      <p style="color:var(--muted);">🔗 <a href="https://github.com/abubakarshaik356" target="_blank" style="color:var(--neon-cyan);">GitHub</a> • <a href="https://linkedin.com/in/abubakarshaik356" target="_blank" style="color:var(--neon-cyan);">LinkedIn</a></p>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div style="height:6px; width:180px; margin:0 auto 10px; border-radius:999px; background: linear-gradient(90deg,var(--neon-cyan), var(--neon-purple)); filter:drop-shadow(0 8px 28px rgba(162,89,255,0.14));"></div>
+      <small>© 2025 Shaik Abubakar Siddiq · Java Full Stack Developer</small>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    AOS.init({ duration:900, once:true });
+
+    // update active nav link on scroll
+    const sections = document.querySelectorAll('section, header');
+    const navLinks = document.querySelectorAll('.nav-link');
+
+    const obsOptions = { root: null, rootMargin: '0px', threshold: 0.55 };
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e=>{
+        if(e.isIntersecting){
+          const id = e.target.getAttribute('id') || 'home';
+          navLinks.forEach(a => {
+            a.classList.toggle('active', a.getAttribute('href') === '#'+id);
+          });
+        }
+      });
+    }, obsOptions);
+
+    sections.forEach(s => observer.observe(s));
+
+    // smooth scroll for nav links (optional enhancement)
+    document.querySelectorAll('.nav-link').forEach(link=>{
+      link.addEventListener('click', e=>{
+        e.preventDefault();
+        const target = document.querySelector(link.getAttribute('href'));
+        if(target) target.scrollIntoView({behavior:'smooth', block:'start'});
+      });
+    });
+  </script>
+</body>
+</html>
